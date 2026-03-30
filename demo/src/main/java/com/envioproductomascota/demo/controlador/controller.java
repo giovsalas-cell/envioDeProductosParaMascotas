@@ -38,4 +38,10 @@ public class controller {
         return servicio.buscarEnvio(id);
     }
 
+    @GetMapping("/envio/obtener-ubicacion/{idEnvio}")
+    public String obtenerInformcion(@PathVariable int idEnvio) {
+
+        return servicio.obtenerUbicacion(idEnvio);
+    }
+
 }
