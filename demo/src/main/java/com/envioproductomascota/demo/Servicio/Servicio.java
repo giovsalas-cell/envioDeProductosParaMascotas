@@ -49,9 +49,6 @@ public class Servicio {
         for (Envio e : listaEnvios) {
             if (e.getIdEnvio().equals(id)) {
                 return e;
-            } else {
-                System.out.println("Envio no encontrado");
-                return null;
             }
         }
         return null;
@@ -63,9 +60,6 @@ public class Servicio {
             if (e.getIdEnvio() == codigoEnvio) {
                 e.setEstadoEnvio(estadoEnvio);
                 return e;
-            } else {
-                System.out.println("Envio no encontrado");
-                return null;
             }
         }
         return null;
@@ -76,9 +70,6 @@ public class Servicio {
             if (e.getIdEnvio() == codigoEnvio) {
                 e.setUbicacion(ubicacion);
                 return e;
-            } else {
-                System.out.println("Envio no encontrado");
-                return null;
             }
         }
         return null;
