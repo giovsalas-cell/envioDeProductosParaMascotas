@@ -1,11 +1,34 @@
 package com.envioproductomascota.demo.modelos;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+@Table
+@Entity(name = "envio")
 public class Envio {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEnvio;
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres")
+    @Column(name = "nombre_cliente")
     private String nombreCliente;
+    @NotBlank(message = "La dirección de envío es obligatoria")
+    @Size(min = 10, max = 200, message = "La dirección de envío debe tener entre 10 y 200 caracteres")
+    @Column(name = "direccion_envio")
     private String direccionEnvio;
+    @NotBlank(message = "El estado de envío es obligatorio")
+    @Column(name = "estado_envio")
     private String estadoEnvio;
+    @NotBlank(message = "La ubicación es obligatoria")
+    @Size(min = 10, max = 200, message = "La ubicación debe tener entre 30 y 200 caracteres")
+    @Column(name = "ubicacion")
     private String ubicacion;
+    @ManyToOne
+    @NotNull(message = "El producto es obligatorio")
+    @JoinColumn(name = "id_producto")
     private Producto producto;
 
     public Envio() {
