@@ -3,6 +3,7 @@ package com.envioproductomascota.demo.controlador;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 public class controller {
 
@@ -27,9 +32,14 @@ public class controller {
     private Servicio servicio;
 
     @GetMapping("/")
-    public List<Envio> listarEnvio() {
-        return servicio.verEnvios();
-
+    public CollectionModel<EntityModel<Envio>> listarEnvio() {
+        List<EntityModel<Envio>> envios = servicio.verEnvios().stream()
+                .map(envio -> EntityModel.of(envio,
+                        linkTo(methodOn(controller.class).buscarEnvio(envio.getIdEnvio())).withSelfRel(),
+                        linkTo(methodOn(controller.class).listarEnvio()).withRel("todos")))
+                .toList();
+        return CollectionModel.of(envios,
+                linkTo(methodOn(controller.class).listarEnvio()).withSelfRel());
     }
 
     @PostMapping("/envios/crear-envio")
@@ -54,8 +64,11 @@ public class controller {
     }
 
     @GetMapping("/envio/buscar-envio/{id}")
-    public Envio buscarEnvio(@PathVariable Long id) {
-        return servicio.buscarEnvio(id);
+    public EntityModel<Envio> buscarEnvio(@PathVariable Long id) {
+        Envio envio = servicio.buscarEnvio(id);
+        return EntityModel.of(envio,
+                linkTo(methodOn(controller.class).buscarEnvio(id)).withSelfRel(),
+                linkTo(methodOn(controller.class).listarEnvio()).withRel("todos"));
     }
 
     @GetMapping("/envio/obtener-ubicacion/{idEnvio}")
